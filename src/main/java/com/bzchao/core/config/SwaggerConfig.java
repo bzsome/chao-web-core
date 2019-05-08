@@ -29,8 +29,6 @@ public class SwaggerConfig {
 
     @Value("${swagger.enable}")
     private boolean enableSwagger;
-    @Value("${system.dev.token}")
-    private String defaultToken;
     @Value("${security.userOauth.tokenName}")
     private String tokenName;
 
