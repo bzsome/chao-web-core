@@ -16,16 +16,21 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+/**
+ * 请求参数处理器
+ */
 public class PageConditionResolver implements HandlerMethodArgumentResolver {
     private static final String PARAMETER_PREFIX = "p_";
 
     public PageConditionResolver() {
     }
 
+    @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterAnnotation(Pageable.class) != null;
+        return parameter.getParameterAnnotation(PageAble.class) != null;
     }
 
+    @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         if (!this.supportsParameter(parameter)) {
             return null;

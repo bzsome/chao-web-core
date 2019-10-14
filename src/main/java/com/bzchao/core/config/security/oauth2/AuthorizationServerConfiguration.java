@@ -1,4 +1,4 @@
-package com.bzchao.core.security.oauth2;
+package com.bzchao.core.config.security.oauth2;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,7 +42,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
                 //客户端ID //密码
-                //新版本必须要对密码进行加密
+                //新版本必须要对密码secret进行加密
                 .withClient(authClientId).secret(passwordEncoder.encode(authClientSecret))
                 .authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit")
                 .authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT")
@@ -64,6 +64,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Bean
     public TokenStore tokenStore() {
+        //Tokenn储存方式，默认使用数据库的方式
         return new JdbcTokenStore(dataSource);
     }
 }

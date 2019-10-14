@@ -1,4 +1,4 @@
-package com.bzchao.core.security.config;
+package com.bzchao.core.config.security.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

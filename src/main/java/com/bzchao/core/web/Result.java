@@ -2,11 +2,14 @@ package com.bzchao.core.web;
 
 import lombok.Data;
 
+/**
+ * REST请求返回实体
+ */
 @Data
-public class Result {
+public class Result<T> {
     private int code;
     private String msg;
-    private Object data;
+    private T data;
 
     public Result() {
         this(200, null);
@@ -20,11 +23,11 @@ public class Result {
         this(code, msg, null);
     }
 
-    public Result(Object data) {
+    public Result(T data) {
         this(200, null, data);
     }
 
-    public Result(int code, String msg, Object data) {
+    public Result(int code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;

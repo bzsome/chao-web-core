@@ -7,6 +7,10 @@ import lombok.Setter;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 自定义分页
+ * @param <T>
+ */
 @Getter
 @Setter
 public class BasePage<T> extends Page<T> {

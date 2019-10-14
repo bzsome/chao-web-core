@@ -7,13 +7,13 @@ import org.springframework.context.ApplicationContext;
 
 @SpringBootApplication
 @Slf4j
-public class TestStartApp {
+public class MainStartApp {
 
 
     public static void main(String[] args) {
         log.info("aaa");
 
-        ApplicationContext ac = SpringApplication.run(TestStartApp.class, args);
+        ApplicationContext ac = SpringApplication.run(MainStartApp.class, args);
     }
 
 
