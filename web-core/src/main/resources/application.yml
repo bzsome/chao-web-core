@@ -1,0 +1,13 @@
+main.config:
+  name: wang
+  age: 11
+server:
+  port: 9090
+swagger:
+  enable: true
+  userOauth:
+    tokenName: Auth
+security:
+  userOauth:
+    clientId: chao-core
+    password: 123456

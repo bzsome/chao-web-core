@@ -25,7 +25,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     private static final String REALM = "MY_OAUTH_REALM";
 
     @Autowired
-    DataSource dataSource;
+    private DataSource dataSource;
     @Autowired
     private TokenStore tokenStore;
     @Autowired
@@ -64,7 +64,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Bean
     public TokenStore tokenStore() {
-        //Tokenn储存方式，默认使用数据库的方式
+        //Token储存方式，默认使用数据库的方式
         return new JdbcTokenStore(dataSource);
     }
 }

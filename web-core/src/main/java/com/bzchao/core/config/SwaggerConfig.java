@@ -29,7 +29,7 @@ public class SwaggerConfig {
 
     @Value("${swagger.enable}")
     private boolean enableSwagger;
-    @Value("${security.userOauth.tokenName}")
+    @Value("${swagger.userOauth.tokenName}")
     private String tokenName;
 
     /**

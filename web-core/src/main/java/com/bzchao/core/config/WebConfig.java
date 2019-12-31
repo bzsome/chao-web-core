@@ -1,6 +1,5 @@
 package com.bzchao.core.config;
 
-import com.bzchao.core.web.PageConditionResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -12,12 +11,6 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer {
     public WebConfig() {
     }
-
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(new PageConditionResolver());
-    }
-
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
