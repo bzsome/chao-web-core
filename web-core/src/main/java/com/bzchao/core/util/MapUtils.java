@@ -18,15 +18,14 @@ public class MapUtils {
      * @return
      */
     public static Object getByNames(Map map, String... keyNames) {
-        Object tempObj = null;
         try {
-            tempObj = map;
+            Object tempObj = map;
             for (String key : keyNames) {
                 tempObj = ((Map) tempObj).get(key);
             }
+            return tempObj;
         } catch (Exception e) {
             throw new RuntimeException("key值错误");
         }
-        return tempObj;
     }
 }

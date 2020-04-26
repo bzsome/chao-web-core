@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/index")
+@RequestMapping("/")
 public class MainController {
     @GetMapping("/test")
     public Object test(Map<String, String> paramMap) {

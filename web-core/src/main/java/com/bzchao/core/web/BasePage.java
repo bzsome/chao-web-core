@@ -1,8 +1,7 @@
 package com.bzchao.core.web;
 
+import lombok.Data;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.WebUtils;
@@ -10,8 +9,7 @@ import org.springframework.web.util.WebUtils;
 import java.util.Map;
 import java.util.TreeMap;
 
-@Getter
-@Setter
+@Data
 public class BasePage<T> extends Page<T> {
     private static final String CONDITION_PARAMETER_PREFIX = "p_";
     private Map<Object, Object> params = new TreeMap<>();

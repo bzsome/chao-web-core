@@ -7,9 +7,9 @@ spring:
     proxy-target-class: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: 123456@Mysql
-    url: jdbc:mysql://120.78.8.150:3306/cydy-crm?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: chao
+    password: 123456
+    url: jdbc:mysql://mysql.bzchao.com:3306/sys?useUnicode=true&characterEncoding=utf-8&useSSL=false
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       # 初始连接数
@@ -26,12 +26,7 @@ spring:
 main.config:
   name: wang
   age: 11
+
 swagger:
   enable: true
-  userOauth:
-    tokenName: Auth
-
-security:
-  userOauth:
-    clientId: chao-core
-    clientSecret: 123456
+  tokenName: Auth

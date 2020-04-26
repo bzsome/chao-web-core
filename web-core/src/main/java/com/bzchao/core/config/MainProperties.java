@@ -2,12 +2,14 @@ package com.bzchao.core.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.stereotype.Component;
+
 
 @Data
-@Configuration
-@ConfigurationProperties(prefix = "main.config", ignoreUnknownFields = true)
+@Component
+@ConfigurationProperties(prefix = "main.config")
 public class MainProperties {
-    String name;
-    Integer age;
+    String name = "chao";
+    Integer age = 18;
 }

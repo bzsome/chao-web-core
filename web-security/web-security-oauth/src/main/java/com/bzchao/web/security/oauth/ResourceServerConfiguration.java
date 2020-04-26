@@ -1,4 +1,4 @@
-package com.bzchao.core.config.security.oauth2;
+package com.bzchao.web.security.oauth;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;

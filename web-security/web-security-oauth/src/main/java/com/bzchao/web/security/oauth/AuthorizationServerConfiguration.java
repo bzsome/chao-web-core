@@ -1,4 +1,4 @@
-package com.bzchao.core.config.security.oauth2;
+package com.bzchao.web.security.oauth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,17 +33,15 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Value("${security.userOauth.clientId}")
-    private String authClientId;
-    @Value("${security.userOauth.clientSecret}")
-    private String authClientSecret;
+    @Autowired
+    private SpringSecurityOauthProperties oauthProperties;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
                 //客户端ID //密码
                 //新版本必须要对密码secret进行加密
-                .withClient(authClientId).secret(passwordEncoder.encode(authClientSecret))
+                .withClient(oauthProperties.getAuthClientId()).secret(passwordEncoder.encode(oauthProperties.getAuthClientSecret()))
                 .authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit")
                 .authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT")
                 //授权用户的操作权限

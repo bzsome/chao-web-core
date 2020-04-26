@@ -1,4 +1,4 @@
-package com.bzchao.core.common;
+package com.bzchao.web.security.oauth;
 
 
 import lombok.Data;

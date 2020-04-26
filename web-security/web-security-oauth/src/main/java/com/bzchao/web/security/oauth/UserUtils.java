@@ -1,4 +1,4 @@
-package com.bzchao.core.util;
+package com.bzchao.web.security.oauth;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

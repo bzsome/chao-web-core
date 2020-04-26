@@ -1,7 +1,8 @@
 package com.bzchao.core.config;
 
 
-import org.springframework.beans.factory.annotation.Value;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -23,13 +24,12 @@ import java.util.List;
  * 通过@Configuration注解，让Spring来加载该类配置。
  * 再通过@EnableSwagger2注解来启用Swagger2。
  */
+@Data
 @Configuration
 @EnableSwagger2
+@ConfigurationProperties(prefix = "swagger")
 public class SwaggerConfig {
-
-    @Value("${swagger.enable}")
-    private boolean enableSwagger;
-    @Value("${swagger.userOauth.tokenName}")
+    private boolean enable;
     private String tokenName;
 
     /**
@@ -41,8 +41,7 @@ public class SwaggerConfig {
      * @return
      */
     @Bean
-    public Docket createRestApi() {
-        ParameterBuilder ticketPar = new ParameterBuilder();
+    public Docket createRestApi() { ParameterBuilder ticketPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<Parameter>();
         ticketPar.name(tokenName).description("token口令")
                 .modelRef(new ModelRef("string")).parameterType("query")
@@ -50,6 +49,7 @@ public class SwaggerConfig {
         pars.add(ticketPar.build());
 
         return new Docket(DocumentationType.SWAGGER_2)
+                .enable(enable)
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .build()
