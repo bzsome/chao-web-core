@@ -1,14 +1,9 @@
 package com.bzchao.shiro.controller;
 
-import com.bzchao.shiro.config.JwtUser;
-import com.bzchao.shiro.service.LoginService;
-import com.bzchao.shiro.util.JwtUtil;
+import com.bzchao.shiro.service.JwtService;
 import com.bzchao.shiro.web.Result;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,17 +13,16 @@ import org.springframework.web.bind.annotation.*;
 public class ShiroController {
 
     @Autowired
-    private LoginService loginService;
+    private JwtService jwtService;
 
     @PostMapping("/login")
     @ResponseBody
     public Object login(String username, String password) {
-        JwtUser jwtUser = loginService.getUserByName(username);
-        if (jwtUser != null && jwtUser.getPassword().equals(password)) {
-            return new ResponseEntity<>(JwtUtil.sign(username, password), HttpStatus.OK);
-        } else {
-            throw new UnauthorizedException();
+        String token = jwtService.generate(username, password);
+        if (token == null || "".equals(token)) {
+            return Result.fail(401, "用户名或密码错误");
         }
+        return Result.ok(token);
     }
 
     @GetMapping("/login")
@@ -38,7 +32,7 @@ public class ShiroController {
     }
 
     /**
-     * shiro中配置401时，显示的页面
+     * shiro中配置的401页面
      *
      * @return
      */

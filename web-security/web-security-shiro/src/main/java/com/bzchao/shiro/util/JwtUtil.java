@@ -11,9 +11,6 @@ import java.util.Date;
 
 public class JwtUtil {
 
-    // 过期时间5分钟
-    private static final long EXPIRE_TIME = 5 * 60 * 1000;
-
     /**
      * 校验token是否正确
      *
@@ -51,13 +48,14 @@ public class JwtUtil {
     /**
      * 生成签名,5min后过期
      *
-     * @param username 用户名
-     * @param secret   用户的密码
+     * @param username     用户名
+     * @param secret       用户的密码
+     * @param expireSecond 过期时间
      * @return 加密的token
      */
-    public static String sign(String username, String secret) {
+    public static String sign(String username, String secret, long expireSecond) {
         try {
-            Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
+            Date date = new Date(System.currentTimeMillis() + expireSecond * 1000);
             Algorithm algorithm = Algorithm.HMAC256(secret);
             // 附带username信息
             return JWT.create()

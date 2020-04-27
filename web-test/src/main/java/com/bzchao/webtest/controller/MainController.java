@@ -1,4 +1,4 @@
-package com.bzchao.core.controller;
+package com.bzchao.webtest.controller;
 
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;

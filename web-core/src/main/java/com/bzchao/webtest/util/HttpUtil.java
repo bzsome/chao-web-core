@@ -1,4 +1,4 @@
-package com.bzchao.core.util;
+package com.bzchao.webtest.util;
 
 import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
@@ -29,7 +29,7 @@ import java.util.Map.Entry;
  *
  * @author lidongyang
  */
-public class HttpUtils {
+public class HttpUtil {
 
     public static String defaultEncoding = "utf-8";
 
@@ -261,7 +261,7 @@ public class HttpUtils {
         headers.put("Referer", url);
 
         String toJson = new Gson().toJson(params);
-        String result = HttpUtils.postRequestJson(url, toJson, headers);
+        String result = HttpUtil.postRequestJson(url, toJson, headers);
         System.out.println(result);
     }
 

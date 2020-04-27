@@ -1,4 +1,4 @@
-package com.bzchao.core.config;
+package com.bzchao.webtest.config;
 
 
 import lombok.Data;
@@ -70,5 +70,21 @@ public class SwaggerConfig {
                 .termsOfServiceUrl("http://www.baidu.com")
                 .version("1.0")
                 .build();
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
+
+    public String getTokenName() {
+        return tokenName;
+    }
+
+    public void setTokenName(String tokenName) {
+        this.tokenName = tokenName;
     }
 }

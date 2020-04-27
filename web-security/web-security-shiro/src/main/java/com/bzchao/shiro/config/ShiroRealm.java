@@ -1,8 +1,7 @@
 package com.bzchao.shiro.config;
 
 
-import com.bzchao.shiro.service.LoginService;
-import com.bzchao.shiro.util.JwtUtil;
+import com.bzchao.shiro.service.JwtService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -20,10 +19,11 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class JwtRealm extends AuthorizingRealm {
+public class ShiroRealm extends AuthorizingRealm {
 
     @Autowired
-    private LoginService loginService;
+    private JwtService jwtService;
+
     /**
      * 每次访问时，均会执行此方法
      *
@@ -34,10 +34,10 @@ public class JwtRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         log.debug("doGetAuthorizationInfo");
         //获取登录用户名
-        JwtUser jwtUser = (JwtUser) principalCollection.getPrimaryPrincipal();
+        ShiroUser shiroUser = (ShiroUser) principalCollection.getPrimaryPrincipal();
         //添加角色和权限
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        for (String role : jwtUser.getPerms()) {
+        for (String role : shiroUser.getPerms()) {
             //添加角色
             simpleAuthorizationInfo.addRole(role);
             simpleAuthorizationInfo.addStringPermission(role);
@@ -53,18 +53,18 @@ public class JwtRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authToken) throws AuthenticationException {
         log.debug("doGetAuthenticationInfo");
         String token = (String) authToken.getPrincipal();
-        String username = JwtUtil.getUsername(token);
-        JwtUser jwtUser = loginService.getUserByName(username);
-        if (jwtUser == null) {
+        String username = jwtService.getUsername(token);
+        ShiroUser shiroUser = jwtService.getUserByName(username);
+        if (shiroUser == null) {
             log.warn("invalid token：" + token);
             throw new AuthenticationException("用户名不存在");
         }
         //签名时使用用户密码，这样没有固定的签名秘钥，不存在秘钥泄露安全性更高
-        boolean verify = JwtUtil.verify(token, username, jwtUser.getPassword());
+        boolean verify = jwtService.verify(token, username, shiroUser.getPassword());
         if (!verify) {
             log.warn("invalid token2：" + token);
             throw new AuthenticationException("token不可用");
         }
-        return new SimpleAuthenticationInfo(jwtUser, token, JwtRealm.class.getSimpleName());
+        return new SimpleAuthenticationInfo(shiroUser, token, ShiroRealm.class.getSimpleName());
     }
 }

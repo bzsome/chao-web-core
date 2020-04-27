@@ -30,7 +30,7 @@ import java.util.List;
  */
 @Slf4j
 @RestControllerAdvice
-public class ShirolExceptionHandler {
+public class ShiroExceptionHandler {
 
     /**
      * Bean Validation Exception

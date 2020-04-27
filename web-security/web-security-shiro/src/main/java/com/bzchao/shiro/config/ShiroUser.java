@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class JwtUser {
+public class ShiroUser {
     private String id;
     private String username;
     private String password;
@@ -14,7 +14,7 @@ public class JwtUser {
      */
     private Set<String> perms;
 
-    public JwtUser(String id, String username, String password, Set<String> perms) {
+    public ShiroUser(String id, String username, String password, Set<String> perms) {
         this.id = id;
         this.username = username;
         this.password = password;

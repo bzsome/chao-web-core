@@ -19,10 +19,6 @@ spring:
       # mysql 用 false | oracle 用 true
       pool-prepared-statements: false
 
-main.config:
-  name: wang
-  age: 11
-
 swagger:
   enable: true
-  tokenName: Auth
+  tokenName: Authorization

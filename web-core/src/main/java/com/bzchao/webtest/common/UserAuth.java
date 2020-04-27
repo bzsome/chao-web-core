@@ -1,4 +1,4 @@
-package com.bzchao.core.common;
+package com.bzchao.webtest.common;
 
 
 import lombok.Data;

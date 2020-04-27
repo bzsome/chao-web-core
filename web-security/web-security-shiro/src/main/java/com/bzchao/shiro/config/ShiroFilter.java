@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
-public class JwtFilter extends BasicHttpAuthenticationFilter {
+public class ShiroFilter extends BasicHttpAuthenticationFilter {
 
     /**
      * 对跨域提供支持

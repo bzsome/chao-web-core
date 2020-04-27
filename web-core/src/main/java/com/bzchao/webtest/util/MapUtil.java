@@ -1,4 +1,4 @@
-package com.bzchao.core.util;
+package com.bzchao.webtest.util;
 
 import java.util.Map;
 
@@ -8,7 +8,7 @@ import java.util.Map;
  * @Date 2019/10/10 上午 11:22
  * @Created by admin
  */
-public class MapUtils {
+public class MapUtil {
 
     /**
      * 获得多层map的值

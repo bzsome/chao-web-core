@@ -1,4 +1,4 @@
-package com.bzchao.core.util;
+package com.bzchao.webtest.util;
 
 import java.util.UUID;
 
