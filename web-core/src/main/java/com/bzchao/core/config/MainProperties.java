@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "main.config")
+@ConfigurationProperties("main.config")
 public class MainProperties {
     String name = "chao";
     Integer age = 18;

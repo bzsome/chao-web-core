@@ -1,10 +1,6 @@
 server:
   port: 811
 spring:
-  aop:
-    #开启aop代理
-    auto: true
-    proxy-target-class: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: chao

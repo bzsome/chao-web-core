@@ -1,5 +1,6 @@
 package com.bzchao.shiro.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -9,9 +10,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.servlet.Filter;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Configuration
 public class shiroConfig {
     //不加这个注解不生效，具体不详
@@ -25,9 +28,9 @@ public class shiroConfig {
 
     //将自己的验证方式加入容器
     @Bean
-    public CustomRealm myShiroRealm() {
-        CustomRealm customRealm = new CustomRealm();
-        return customRealm;
+    public JwtRealm myShiroRealm() {
+        JwtRealm jwtRealm = new JwtRealm();
+        return jwtRealm;
     }
 
     //权限管理，配置主要是Realm的管理认证
@@ -40,22 +43,32 @@ public class shiroConfig {
 
     //Filter工厂，设置对应的过滤条件和跳转条件
     @Bean
-    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
-        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-        shiroFilterFactoryBean.setSecurityManager(securityManager);
-        Map<String, String> map = new HashMap<>();
-        //登出
-        map.put("/logout", "logout");
-        //对所有用户认证
-        map.put("/**", "authc");
-        //登录
-        shiroFilterFactoryBean.setLoginUrl("/login");
-        //首页
-        shiroFilterFactoryBean.setSuccessUrl("/index");
-        //错误页面，认证不通过跳转
-        shiroFilterFactoryBean.setUnauthorizedUrl("/error");
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
-        return shiroFilterFactoryBean;
+    public ShiroFilterFactoryBean factoryBean(SecurityManager securityManager) {
+        log.info("factoryBean");
+        ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
+        factoryBean.setSecurityManager(securityManager);
+
+        // 添加自己的过滤器并且取名为jwt
+        Map<String, Filter> filterMap = new HashMap<>();
+        filterMap.put("jwt", new JwtFilter());
+        factoryBean.setFilters(filterMap);
+
+        Map<String, String> filterChainMap = new HashMap<>();
+
+        //所有请求默认使用我们的过滤器
+        filterChainMap.put("/**", "jwt");
+        filterChainMap.put("/shiro/**", "anon");
+        // 不通过我们的Filter
+        filterChainMap.put("/static/**", "anon");
+        filterChainMap.put("/druid/**", "anon");
+        filterChainMap.put("/actuator/**", "anon");
+        filterChainMap.put("/swagger-ui.html", "anon");
+        filterChainMap.put("/swagger-resources/**", "anon");
+        filterChainMap.put("/swagger/**", "anon");
+        filterChainMap.put("/v2/api-docs", "anon");
+        filterChainMap.put("/webjars/springfox-swagger-ui/**", "anon");
+        factoryBean.setFilterChainDefinitionMap(filterChainMap);
+        return factoryBean;
     }
 
     //加入注解的使用，不加入这个注解不生效

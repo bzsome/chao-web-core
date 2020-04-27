@@ -5,19 +5,19 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class User {
+public class JwtUser {
     private String id;
-    private String userName;
+    private String username;
     private String password;
     /**
      * 用户对应的角色集合
      */
-    private Set<Role> roles;
+    private Set<String> perms;
 
-    public User(String id, String userName, String password, Set<Role> roles) {
+    public JwtUser(String id, String username, String password, Set<String> perms) {
         this.id = id;
-        this.userName = userName;
+        this.username = username;
         this.password = password;
-        this.roles = roles;
+        this.perms = perms;
     }
 }
