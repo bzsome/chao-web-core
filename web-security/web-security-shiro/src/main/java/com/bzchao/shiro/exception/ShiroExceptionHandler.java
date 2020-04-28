@@ -77,7 +77,7 @@ public class ShiroExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public Result handleException(Exception e) {
-        log.debug("其他异常");
+        log(e);
         return Result.fail(ErrorCode.INTERNAL_SERVER_ERROR.getCode(), e.getMessage() == null ? e.toString() : e.getMessage());
     }
 

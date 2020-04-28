@@ -38,34 +38,35 @@ public class ShiroFilter extends BasicHttpAuthenticationFilter {
      */
     @Override
     protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
-        log.info("isLoginAttempt,{}", "request");
-        // 个人优化，优先从url中获得Token。
         // 即携带token的方式有两种：1.请求头Authorization，2.url参数(表单也行)Authorization
-        String[] authorizationParam = request.getParameterMap().get(AUTHORIZATION_HEADER);
-        if (authorizationParam != null && authorizationParam.length > 0 && authorizationParam[0].length() > 0) {
-            return true;
-        }
+        String paramToken = getParamToken(request);
         String authzHeader = this.getAuthzHeader(request);
-        return authzHeader != null;
+        return paramToken != null || authzHeader != null;
     }
 
     /**
-     * 根据token找到对象实体，有缓存机制
+     * 根据token找到对象实体
      * isLoginAttempt执行后会执行此方法
      */
     @Override
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
-        log.debug("createToken");
+        // 个人优化，优先从url中获得Token。
+        String paramToken = this.getParamToken(request);
+        if (paramToken != null && paramToken.length() != 0) {
+            return new UsernamePasswordToken(paramToken, paramToken);
+        }
+
         String authToken = this.getAuthzHeader(request);
         if (authToken != null && authToken.length() != 0) {
             return new UsernamePasswordToken(authToken, authToken);
-        } else {
-            return new UsernamePasswordToken();
         }
+
+        return new UsernamePasswordToken();
     }
 
     /**
-     * 401未授权时执行
+     * 401未授权时执行，filter层的异常不受exceptionAdvice控制
+     * 原生为认证弹窗
      */
     @Override
     protected boolean sendChallenge(ServletRequest request, ServletResponse response) {
@@ -75,20 +76,20 @@ public class ShiroFilter extends BasicHttpAuthenticationFilter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        /*
-        //或者执行返回数据
-        httpServletResponse.setCharacterEncoding("utf-8");
-        httpServletResponse.setContentType("application/json");
-        ObjectMapper objectMapper = new ObjectMapper();
-        Result<Object> result = Result.fail(401, "未登录");
-        try {
-            httpServletResponse.getWriter().append(objectMapper.writeValueAsString(result));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
         return false;
     }
 
+    /**
+     * 从url(表单中获得token)
+     *
+     * @param request
+     * @return
+     */
+    private String getParamToken(ServletRequest request) {
+        String[] authorizationParam = request.getParameterMap().get(AUTHORIZATION_HEADER);
+        if (authorizationParam != null && authorizationParam.length > 0 && authorizationParam[0].length() > 0) {
+            return authorizationParam[0];
+        }
+        return null;
+    }
 }

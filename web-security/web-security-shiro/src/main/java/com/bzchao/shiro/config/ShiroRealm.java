@@ -25,14 +25,41 @@ public class ShiroRealm extends AuthorizingRealm {
     private JwtService jwtService;
 
     /**
-     * 每次访问时，均会执行此方法
+     * 默认使用此方法进行用户名正确与否验证，错误抛出异常即可。
+     * 此方法有缓存，sessionId管理器，判断是同一sessionId则不再执行此段代码
+     * 之前执行方法：createToken(ServletRequest request, ServletResponse response)
+     * 之后只执行doGetAuthorizationInfo(PrincipalCollection principalCollection)
+     */
+    @Override
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authToken) throws AuthenticationException {
+        String token = (String) authToken.getPrincipal();
+        String username = jwtService.getUsername(token);
+        log.debug("doGetAuthenticationInfo:authToken, {} 新的sessionId，重新查询用户信息、权限信息", username);
+        ShiroUser shiroUser = jwtService.getUserByName(username);
+        if (shiroUser == null) {
+            log.warn("invalid token：" + token);
+            throw new AuthenticationException("用户名不存在");
+        }
+        //签名时使用用户密码，这样没有固定的签名秘钥，不存在秘钥泄露安全性更高
+        boolean verify = jwtService.verify(token, username, shiroUser.getEnPassword());
+        if (!verify) {
+            log.warn("invalid token2：" + token);
+            throw new AuthenticationException("token不可用");
+        }
+
+        return new SimpleAuthenticationInfo(shiroUser, token, ShiroRealm.class.getSimpleName());
+    }
+
+    /**
+     * 授权模块，获取用户角色和权限
+     * 每次访问时需要权限控制的url时,执行此方法
      *
      * @param principalCollection
      * @return
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        log.debug("doGetAuthorizationInfo");
+        log.debug("doGetAuthorizationInfo:principal");
         //获取登录用户名
         ShiroUser shiroUser = (ShiroUser) principalCollection.getPrimaryPrincipal();
         //添加角色和权限
@@ -45,26 +72,5 @@ public class ShiroRealm extends AuthorizingRealm {
         return simpleAuthorizationInfo;
     }
 
-    /**
-     * 默认使用此方法进行用户名正确与否验证，错误抛出异常即可。
-     * 此方法有缓存，即同一token只会查询一次
-     */
-    @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authToken) throws AuthenticationException {
-        log.debug("doGetAuthenticationInfo");
-        String token = (String) authToken.getPrincipal();
-        String username = jwtService.getUsername(token);
-        ShiroUser shiroUser = jwtService.getUserByName(username);
-        if (shiroUser == null) {
-            log.warn("invalid token：" + token);
-            throw new AuthenticationException("用户名不存在");
-        }
-        //签名时使用用户密码，这样没有固定的签名秘钥，不存在秘钥泄露安全性更高
-        boolean verify = jwtService.verify(token, username, shiroUser.getPassword());
-        if (!verify) {
-            log.warn("invalid token2：" + token);
-            throw new AuthenticationException("token不可用");
-        }
-        return new SimpleAuthenticationInfo(shiroUser, token, ShiroRealm.class.getSimpleName());
-    }
+
 }

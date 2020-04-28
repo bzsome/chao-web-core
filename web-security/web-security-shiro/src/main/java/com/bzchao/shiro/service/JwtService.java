@@ -7,7 +7,7 @@ import com.bzchao.shiro.util.JwtUtil;
 public abstract class JwtService {
 
     //过期时间，默认60分钟
-    private static long expireTime = 60 * 60;
+    protected static long expireTime = 60 * 60;
 
     /**
      * 必须实现，根据用户名获得用户信息
@@ -22,12 +22,12 @@ public abstract class JwtService {
     }
 
     public boolean verify(String token, String username, String secret) {
-        return JwtUtil.verify(token, username, secret) && verifyByCache(token);
+        return JwtUtil.verify(token, username, secret) && verifyByCache(username, token);
     }
 
     public String generate(String username, String password) {
         ShiroUser shiroUser = this.getUserByName(username);
-        String enpassword = this.enpassword(shiroUser.getPassword());
+        String enpassword = this.enpassword(shiroUser.getEnPassword());
         if (shiroUser != null && enpassword.equals(password)) {
             String token = JwtUtil.sign(username, password, expireTime);
             this.saveCache(username, token);
@@ -52,12 +52,12 @@ public abstract class JwtService {
     }
 
     //验证缓存中是否有token（可选实现）
-    public boolean verifyByCache(String token) {
+    public boolean verifyByCache(String username, String token) {
         return true;
     }
 
     //验证缓存中删除有token（可选实现）
-    public void removeByCache(String token) {
+    public void removeByCache(String username) {
 
     }
 
