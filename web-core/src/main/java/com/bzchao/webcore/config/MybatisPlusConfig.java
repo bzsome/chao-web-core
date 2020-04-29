@@ -1,4 +1,4 @@
-package com.bzchao.webtest.config;
+package com.bzchao.webcore.config;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import org.springframework.context.annotation.Bean;

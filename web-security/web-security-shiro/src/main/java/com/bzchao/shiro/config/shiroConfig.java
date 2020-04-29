@@ -1,6 +1,7 @@
 package com.bzchao.shiro.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
@@ -8,9 +9,8 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.crazycake.shiro.RedisCacheManager;
-import org.crazycake.shiro.RedisManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +19,6 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.Filter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -27,7 +26,6 @@ import java.util.Map;
 @Configuration
 public class shiroConfig {
     private String excludeUrls;
-
 
     //不加这个注解不生效，具体不详
     @Bean
@@ -44,7 +42,6 @@ public class shiroConfig {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(shiroRealm());
         securityManager.setSubjectDAO(subjectDAO());
-        securityManager.setSubjectFactory(subjectFactory());
         return securityManager;
     }
 
@@ -109,41 +106,8 @@ public class shiroConfig {
         return advisor;
     }
 
-    @Bean
-    public StatelessDefaultSubjectFactory subjectFactory() {
-        StatelessDefaultSubjectFactory subjectFactory = new StatelessDefaultSubjectFactory();
-        return subjectFactory;
-    }
-
-
-    /**
-     * 配置shiro redisManager
-     * <p>
-     * 使用的是shiro-redis开源插件
-     *
-     * @return
-     */
-    public RedisManager redisManager() {
-        RedisManager redisManager = new RedisManager();
-        redisManager.setHost("alivps.bzchao.com");
-        return redisManager;
-    }
-
-    /**
-     * cacheManager 缓存 redis实现
-     * <p>
-     * 使用的是shiro-redis开源插件
-     *
-     * @return
-     */
-    @Bean
-    public RedisCacheManager cacheManager() {
-        RedisCacheManager redisCacheManager = new RedisCacheManager();
-        redisCacheManager.setRedisManager(redisManager());
-        // 必须要设置主键名称，shiro-redis 插件用过这个缓存用户信息
-        redisCacheManager.setPrincipalIdFieldName("username");
-        return redisCacheManager;
-    }
+    @Autowired
+    private ShiroCacheManager cacheManager;
 
     @Bean
     public AuthorizingRealm shiroRealm() {
@@ -151,7 +115,10 @@ public class shiroConfig {
         shiroRealm.setCachingEnabled(true);
         shiroRealm.setAuthenticationCachingEnabled(true);
         shiroRealm.setAuthorizationCachingEnabled(true);
-        shiroRealm.setCacheManager(cacheManager());
+        //具体查看RedisCacheManager会获取此值，作为key的一部分
+        shiroRealm.setAuthenticationCacheName("webauth");
+        shiroRealm.setName("webcore");
+        shiroRealm.setCacheManager(cacheManager);
         return shiroRealm;
     }
 

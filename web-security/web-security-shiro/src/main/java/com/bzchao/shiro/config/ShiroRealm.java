@@ -18,11 +18,12 @@ import org.springframework.stereotype.Component;
  * Jwt权限控制
  */
 @Slf4j
-@Component
 public class ShiroRealm extends AuthorizingRealm {
 
     @Autowired
     private JwtService jwtService;
+
+
 
     /**
      * 默认使用此方法进行用户名正确与否验证，错误抛出异常即可。
@@ -71,6 +72,5 @@ public class ShiroRealm extends AuthorizingRealm {
         }
         return simpleAuthorizationInfo;
     }
-
 
 }

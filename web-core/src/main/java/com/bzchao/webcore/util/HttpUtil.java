@@ -1,4 +1,4 @@
-package com.bzchao.webtest.util;
+package com.bzchao.webcore.util;
 
 import com.google.gson.Gson;
 import org.apache.http.HttpEntity;

@@ -1,4 +1,4 @@
-package com.bzchao.webtest.config;
+package com.bzchao.webcore.config;
 
 
 import lombok.Data;

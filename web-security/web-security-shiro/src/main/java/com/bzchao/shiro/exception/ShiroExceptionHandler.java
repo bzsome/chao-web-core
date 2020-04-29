@@ -60,7 +60,7 @@ public class ShiroExceptionHandler {
      */
     @ExceptionHandler({ShiroException.class})
     public Result handleShiroException(ShiroException e) {
-        log.debug("shiro异常");
+        log.debug("Shiro权限错误");
         return Result.fail(ErrorCode.FORBIDDEN.getCode(), e.getMessage() == null ? e.toString() : e.getMessage());
     }
 
@@ -77,7 +77,7 @@ public class ShiroExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public Result handleException(Exception e) {
-        log(e);
+        this.log(e);
         return Result.fail(ErrorCode.INTERNAL_SERVER_ERROR.getCode(), e.getMessage() == null ? e.toString() : e.getMessage());
     }
 

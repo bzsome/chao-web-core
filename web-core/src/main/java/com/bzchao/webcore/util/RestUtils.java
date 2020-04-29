@@ -1,4 +1,4 @@
-package com.bzchao.webtest.util;
+package com.bzchao.webcore.util;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;

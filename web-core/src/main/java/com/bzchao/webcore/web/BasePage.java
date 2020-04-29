@@ -1,4 +1,4 @@
-package com.bzchao.webtest.web;
+package com.bzchao.webcore.web;
 
 import lombok.Data;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

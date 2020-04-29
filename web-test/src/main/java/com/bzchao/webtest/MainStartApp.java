@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @Slf4j
 //扫描shiro包，加载包下的config，bean
-@ComponentScan(basePackages = {"com.bzchao.webtest", "com.bzchao.shiro"})
+@ComponentScan(basePackages = {"com.bzchao.webcore", "com.bzchao.webtest", "com.bzchao.shiro"})
 @SpringBootApplication
 public class MainStartApp {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package com.bzchao.webtest.util;
+package com.bzchao.webcore.util;
 
 import java.util.Map;
 import java.util.stream.Collectors;

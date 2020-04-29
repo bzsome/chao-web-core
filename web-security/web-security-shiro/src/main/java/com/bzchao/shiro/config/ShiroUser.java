@@ -16,6 +16,9 @@ public class ShiroUser implements Serializable {
      */
     private Set<String> perms;
 
+    public ShiroUser() {
+    }
+
     public ShiroUser(String id, String username, String enPassword, Set<String> perms) {
         this.id = id;
         this.username = username;
