@@ -8,11 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
-
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -56,56 +51,6 @@ public class RestUtils extends RestTemplate {
     public <T> ResponseEntity<T> postForEntity(String reqUrl, HttpEntity requestEntity, ParameterizedTypeReference<T> typeReference) {
         ResponseEntity<T> responseEntity = super.exchange(reqUrl, HttpMethod.POST, requestEntity, typeReference);
         return responseEntity;
-    }
-
-    /**
-     * 获得返回数据类型
-     * 原创代码
-     *
-     * @param mainClass 主类
-     * @param tClass    主类中的泛型
-     * @param <E>
-     * @param <T>
-     * @return
-     */
-    public <E, T> ParameterizedTypeReference<E> getTypeReference(Class<E> mainClass, Class<T> tClass) {
-        return new ParameterizedTypeReference<E>() {
-            @Override
-            public Type getType() {
-                //主类中的泛型，可以有多个
-                Type[] responseWrapperTypes = {tClass};
-                ParameterizedType responseWrapperType = ParameterizedTypeImpl.make(mainClass, responseWrapperTypes, null);
-                return responseWrapperType;
-            }
-        };
-    }
-
-    /**
-     * 知道主类的情况，例如主类为List
-     *
-     * @param tClass
-     * @param <T>
-     * @return
-     */
-    public <T> ParameterizedTypeReference getTypeReferenceList(Class<T> tClass) {
-        //此代码不能正常使用，必须显式指定T，如List<MerchantOrder>不能使用List<T>
-        ParameterizedTypeReference<List<T>> typeReference = new ParameterizedTypeReference<List<T>>() {
-        };
-
-        // 解决不能显示指定T的情况，
-        // 参照 https://stackoverflow.com/questions/36915823/spring-resttemplate-and-generic-types-parameterizedtypereference-collections-lik
-        return new ParameterizedTypeReference<List<T>>() {
-            @Override
-            public Type getType() {
-                Type type = super.getType();
-                if (type instanceof ParameterizedType) {
-                    Type[] responseWrapperTypes = {tClass};
-                    ParameterizedType responseWrapperType = ParameterizedTypeImpl.make(List.class, responseWrapperTypes, null);
-                    return responseWrapperType;
-                }
-                return type;
-            }
-        };
     }
 
     /**
